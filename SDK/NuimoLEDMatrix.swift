@@ -19,12 +19,12 @@ open class NuimoLEDMatrix {
     }
 
     public init(string: String) {
-        leds = string
+        let normalizedString = string
             // Cut off after count of LEDs
-            .substring(to: string.characters.index(string.startIndex, offsetBy: min(string.characters.count, NuimoLEDMatrix.ledCount)))
+            .prefix(NuimoLEDMatrix.ledCount)
             // Right fill up to count of LEDs
             .padding(toLength: NuimoLEDMatrix.ledCount, withPad: " ", startingAt: 0)
-            .characters
+        leds = Array(normalizedString)
             .map{!NuimoLEDMatrix.ledOffCharacters.contains($0)}
     }
 
@@ -42,15 +42,12 @@ open class NuimoLEDMatrix {
     }
 
     public convenience init(progressWithVolumeBar progress: Double) {
-        let width = Int(ceil(max(0.0, min(1.0, progress)) * 9))
-        let string = (0..<9)
-            .map{String(repeating: " ", count: 9 - ($0 + 1)) + String(repeating: ".", count: $0 + 1)}
+        let width = Int((max(0.0, min(1.0, progress)) * 9).rounded(.up))
+        let strings = (0..<9)
+            .map {String(repeating: " ", count: 9 - ($0 + 1)) + String(repeating: ".", count: $0 + 1)}
             .enumerated()
-            .map{$0.element
-                .substring(to: $0.element.characters.index($0.element.startIndex, offsetBy: width))
-                .padding(toLength: 9, withPad: " ", startingAt: 0)}
-            .reduce("", +)
-        self.init(string: string)
+            .map {$0.element.prefix(width).padding(toLength: 9, withPad: " ", startingAt: 0)}
+        self.init(string: strings.joined(separator: ""))
     }
 
     internal func equals(_ other: NuimoLEDMatrix) -> Bool {

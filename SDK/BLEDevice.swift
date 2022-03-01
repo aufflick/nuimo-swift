@@ -172,7 +172,7 @@ extension BLEDevice: CBPeripheralDelegate {
     open func peripheral(_ peripheral: CBPeripheral, didDiscoverServices error: Error?) {
         queue.assertIsDispatching()
         peripheral.services?
-            .flatMap{ service in (service, charactericUUIDsForServiceUUID[service.uuid]?.filter { !service.characteristicUUIDs.contains($0) } ?? [] ) }
+            .map { service in (service, charactericUUIDsForServiceUUID[service.uuid]?.filter { !service.characteristicUUIDs.contains($0) } ?? [] ) }
             .forEach{ peripheral.discoverCharacteristics($0.1, for: $0.0) }
     }
 

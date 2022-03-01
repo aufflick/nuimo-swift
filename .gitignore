@@ -5,3 +5,5 @@ xcuserdata
 *.pbxuser
 *.xccheckout
 *.xcuserstate
+.build
+.swiftpm

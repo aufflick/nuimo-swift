@@ -83,7 +83,7 @@ open class NuimoBluetoothController: BLEDevice, NuimoController {
             return false
         }
         queue.async {
-            peripheral.writeValue(Data(bytes: UnsafePointer<UInt8>([UInt8(1)]), count: 1), for: rebootToDFUModeCharacteristic, type: .withResponse)
+            peripheral.writeValue(Data(bytes: [UInt8(1)], count: 1), for: rebootToDFUModeCharacteristic, type: .withResponse)
         }
         return true
     }
@@ -96,7 +96,7 @@ open class NuimoBluetoothController: BLEDevice, NuimoController {
             return false
         }
         queue.async {
-            peripheral.writeValue(Data(bytes: UnsafePointer<UInt8>([UInt8(1)]), count: 1), for: flySensorCalibrationCharacteristic, type: .withResponse)
+            peripheral.writeValue(Data(bytes: [UInt8(1)], count: 1), for: flySensorCalibrationCharacteristic, type: .withResponse)
         }
         return true
     }
@@ -111,7 +111,7 @@ open class NuimoBluetoothController: BLEDevice, NuimoController {
         }
         let interval = UInt8(max(0, min(255, heartBeatInterval)))
         queue.async {
-            peripheral.writeValue(Data(bytes: UnsafePointer<UInt8>([interval]), count: 1), for: characteristic, type: .withResponse)
+            peripheral.writeValue(Data(bytes: [interval], count: 1), for: characteristic, type: .withResponse)
         }
     }
 
@@ -158,7 +158,7 @@ open class NuimoBluetoothController: BLEDevice, NuimoController {
 }
 
 public let NuimoBluetoothControllerDidSendHeartBeatNotification = "NuimoBluetoothControllerDidSendHeartBeatNotification"
-public extension Notification.Name {
+extension Notification.Name {
     public static let NuimoBluetoothControllerDidSendHeartBeat = Notification.Name(rawValue: NuimoBluetoothControllerDidSendHeartBeatNotification)
 }
 
@@ -223,7 +223,7 @@ private class LEDMatrixWriter {
             (currentWithFadeTransition              ? UInt8(1 << 4) : 0) +
             (currentMatrix is NuimoBuiltInLEDMatrix ? UInt8(1 << 5) : 0)
         matrixBytes += [UInt8(min(max(controller.matrixBrightness, 0.0), 1.0) * 255), UInt8(currentDisplayInterval * 10.0)]
-        peripheral.writeValue(Data(bytes: UnsafePointer<UInt8>(matrixBytes), count: matrixBytes.count), for: matrixCharacteristic, type: withWriteResponse ? .withResponse : .withoutResponse)
+        peripheral.writeValue(Data(bytes: matrixBytes, count: matrixBytes.count), for: matrixCharacteristic, type: withWriteResponse ? .withResponse : .withoutResponse)
 
         isWaitingForWriteResponse        = withWriteResponse
         lastWrittenMatrix                = currentMatrix
@@ -270,7 +270,7 @@ private let kRebootToDFUModeCharacteristicUUID      = CBUUID(string: "F29B152A-C
 private let kHeartBeatCharacteristicUUID            = CBUUID(string: "F29B152B-CB19-40F3-BE5C-7241ECB82FD2")
 private let kFlySensorCalibrationCharacteristicUUID = CBUUID(string: "F29B152C-CB19-40F3-BE5C-7241ECB82FD2")
 
-internal let nuimoServiceUUIDs: [CBUUID] = [
+public let nuimoServiceUUIDs: [CBUUID] = [
     kBatteryServiceUUID,
     kDeviceInformationServiceUUID,
     kLEDMatrixServiceUUID,

@@ -8,7 +8,9 @@
 //  This software may be modified and distributed under the terms
 //  of the MIT license.  See the LICENSE file for details.
 
-public protocol NuimoController: class {
+import Foundation
+
+public protocol NuimoController: AnyObject {
     var uuid: UUID {get}
     var delegate: NuimoControllerDelegate? {get set}
 
@@ -30,7 +32,7 @@ public protocol NuimoController: class {
     func display(matrix: NuimoLEDMatrix, interval: TimeInterval, options: Int)
 }
 
-public extension NuimoController {
+extension NuimoController {
     public func connect() {
         self.connect(autoReconnect: false)
     }
@@ -82,7 +84,7 @@ public enum NuimoConnectionState {
     case invalidated
 }
 
-public protocol NuimoControllerDelegate: class {
+public protocol NuimoControllerDelegate: AnyObject {
     func nuimoController(_ controller: NuimoController, didChangeConnectionState state: NuimoConnectionState, withError error: Error?)
     func nuimoController(_ controller: NuimoController, didUpdateBatteryLevel batteryLevel: Int)
     func nuimoController(_ controller: NuimoController, didReceiveGestureEvent event: NuimoGestureEvent)

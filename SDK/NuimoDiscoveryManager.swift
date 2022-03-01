@@ -64,7 +64,7 @@ private class NuimoDiscoveryManagerPrivate: BLEDiscoveryManagerDelegate {
     }
 }
 
-public protocol NuimoDiscoveryDelegate: class {
+public protocol NuimoDiscoveryDelegate: AnyObject {
     //TODO: Rename delegate methods to `deviceFor:` etc.
     func nuimoDiscoveryManager(_ discovery: NuimoDiscoveryManager, deviceForPeripheral peripheral: CBPeripheral, advertisementData: [String : Any]) -> BLEDevice?
     func nuimoDiscoveryManager(_ discovery: NuimoDiscoveryManager, didDiscoverNuimoController controller: NuimoController)

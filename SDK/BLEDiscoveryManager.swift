@@ -97,7 +97,7 @@ extension BLEDiscoveryManager: CBCentralManagerDelegate {
         }
 
         restorablePeripherals
-            .flatMap { delegate?.bleDiscoveryManager(self, deviceFor: $0, advertisementData: [:]) }
+            .compactMap { delegate?.bleDiscoveryManager(self, deviceFor: $0, advertisementData: [:]) }
             .forEach {
                 deviceForUUID[$0.uuid] = $0
                 delegate?.bleDiscoveryManager(self, didRestore: $0)
@@ -115,7 +115,7 @@ extension BLEDiscoveryManager: CBCentralManagerDelegate {
             return
         }
 
-        if centralManager.state.rawValue >= CBCentralManagerState.poweredOff.rawValue {
+        if centralManager.state.rawValue >= CBManagerState.poweredOff.rawValue {
             if !didRestoreState {
                 self.centralManager(central, willRestoreState: [:])
             }
@@ -166,7 +166,7 @@ extension BLEDiscoveryManager: CBCentralManagerDelegate {
     }
 }
 
-public protocol BLEDiscoveryManagerDelegate: class {
+public protocol BLEDiscoveryManagerDelegate: AnyObject {
     func bleDiscoveryManager(_ discovery: BLEDiscoveryManager, deviceFor peripheral: CBPeripheral, advertisementData: [String : Any]) -> BLEDevice?
     func bleDiscoveryManager(_ discovery: BLEDiscoveryManager, didDiscover device: BLEDevice)
     func bleDiscoveryManager(_ discovery: BLEDiscoveryManager, didRestore device: BLEDevice)
