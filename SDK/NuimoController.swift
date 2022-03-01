@@ -90,10 +90,3 @@ public protocol NuimoControllerDelegate: AnyObject {
     func nuimoController(_ controller: NuimoController, didReceiveGestureEvent event: NuimoGestureEvent)
     func nuimoControllerDidDisplayLEDMatrix(_ controller: NuimoController)
 }
-
-public extension NuimoControllerDelegate {
-    func nuimoController(_ controller: NuimoController, didChangeConnectionState state: NuimoConnectionState, withError error: Error?) {}
-    func nuimoController(_ controller: NuimoController, didUpdateBatteryLevel batteryLevel: Int) {}
-    func nuimoController(_ controller: NuimoController, didReceiveGestureEvent event: NuimoGestureEvent) {}
-    func nuimoControllerDidDisplayLEDMatrix(_ controller: NuimoController) {}
-}

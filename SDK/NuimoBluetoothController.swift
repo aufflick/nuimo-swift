@@ -45,7 +45,9 @@ open class NuimoBluetoothController: BLEDevice, NuimoController {
             matrixWriter.matrixCharacteristic = nil
         }
         let newState: NuimoConnectionState =  {
-            guard isReachable, let peripheral = peripheral else { return .invalidated }
+            // Previously was also checking isReachable, but that always fails.
+            // TODO: Perhaps part of the check should be re-instated?
+            guard let peripheral = peripheral else { return .invalidated }
             if peripheral.state == .connected {
                 return firmwareVersion == nil ? .connecting : .connected
             }
