@@ -6,7 +6,7 @@ let package = Package(
   name: "NuimoSwift",
   platforms: [
     .macOS(.v10_13),
-    .iOS(.v9),
+    .iOS(.v10),
   ],
   products: [
     .library(
